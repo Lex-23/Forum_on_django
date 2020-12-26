@@ -47,3 +47,6 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'Comment by {self.author} on {self.post}'
+
+    def post_title(self):
+        return self.post.title

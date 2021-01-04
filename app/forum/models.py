@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 
 from django.contrib.contenttypes.fields import GenericRelation
-from likes.models import Like
+from likes.models import Like, Dislike
 
 class Category(models.Model):
     title = models.CharField(max_length=50)
@@ -18,6 +18,7 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     published = models.DateTimeField(auto_now=True)
     likes = GenericRelation(Like)
+    dislikes = GenericRelation(Dislike)
     category = models.ForeignKey(Category,
                                  on_delete=models.DO_NOTHING,
                                  related_name='category_post')
@@ -31,6 +32,10 @@ class Post(models.Model):
     @property
     def total_likes(self):
         return self.likes.count()
+
+    @property
+    def total_dislikes(self):
+        return self.dislikes.count()
 
 
 class Comment(models.Model):

@@ -6,10 +6,10 @@ from .serializers import PostSerializer, CommentSerializer
 from .models import Post, Comment
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from likes.mixins import LikedMixin
+from likes.mixins import LikedMixin, DislikedMixin
 
 
-class PostViewSet(LikedMixin, ModelViewSet):
+class PostViewSet(LikedMixin, DislikedMixin, ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)

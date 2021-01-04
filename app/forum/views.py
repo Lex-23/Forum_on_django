@@ -5,11 +5,14 @@ from rest_framework.viewsets import ModelViewSet
 from .serializers import PostSerializer, CommentSerializer
 from .models import Post, Comment
 from rest_framework.filters import OrderingFilter, SearchFilter
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from likes.mixins import LikedMixin
 
 
-class PostViewSet(ModelViewSet):
+class PostViewSet(LikedMixin, ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly,)
 
     filter_backends = (OrderingFilter, SearchFilter)
     search_fields = ['category']

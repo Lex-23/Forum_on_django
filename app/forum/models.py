@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
 
+from django.contrib.contenttypes.fields import GenericRelation
+from likes.models import Like
+
 class Category(models.Model):
     title = models.CharField(max_length=50)
 
@@ -14,6 +17,7 @@ class Post(models.Model):
     text = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     published = models.DateTimeField(auto_now=True)
+    likes = GenericRelation(Like)
     category = models.ForeignKey(Category,
                                  on_delete=models.DO_NOTHING,
                                  related_name='category_post')
@@ -23,6 +27,10 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return reverse('post_edit', kwargs={'pk': self.pk})
+
+    @property
+    def total_likes(self):
+        return self.likes.count()
 
 
 class Comment(models.Model):

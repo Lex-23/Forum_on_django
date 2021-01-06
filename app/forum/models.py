@@ -25,6 +25,8 @@ class Post(models.Model):
     category = models.ForeignKey(Category,
                                  on_delete=models.DO_NOTHING,
                                  related_name='category_post')
+    status = models.BooleanField(default=True,
+                                 verbose_name='status')
 
     def __str__(self):
         return self.title

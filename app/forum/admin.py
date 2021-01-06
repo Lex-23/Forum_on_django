@@ -3,10 +3,10 @@ from .models import Post, Comment, Category, Reply
 
 
 class PostAdmin(admin.ModelAdmin):
-    fields = 'title', 'author', 'category', 'text',
+    fields = 'title', 'author', 'category', 'text', 'status',
     search_fields = 'title', 'category', 'published',
-    list_display = 'title', 'author', 'category', 'published', 'id',
-    list_filter = 'title', 'author', 'category', 'published',
+    list_display = 'title', 'author', 'category', 'published', 'id', 'status',
+    list_filter = 'title', 'author', 'category', 'published', 'status',
 
 
 admin.site.register(Post, PostAdmin)

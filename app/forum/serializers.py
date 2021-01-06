@@ -20,6 +20,7 @@ class PostSerializer(serializers.ModelSerializer):
             'is_unfan',
             'total_dislikes',
             'total_comments',
+            'status',
             'url',
 
         )

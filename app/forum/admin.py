@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post, Comment, Category
+from .models import Post, Comment, Category, Reply
 
 
 class PostAdmin(admin.ModelAdmin):
@@ -20,6 +20,17 @@ class CommentAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Comment, CommentAdmin)
+
+
+class ReplyAdmin(admin.ModelAdmin):
+    fields = 'text', 'author', 'comment', 'active',
+    list_display = 'comment_id', 'author', 'created', 'active', 'updated', 'id',
+    list_filter = 'active', 'created', 'author', 'comment',
+    search_fields = 'author', 'comment', 'created',
+
+
+admin.site.register(Reply, ReplyAdmin)
+
 
 class CategoryAdmin(admin.ModelAdmin):
     fields = 'title',

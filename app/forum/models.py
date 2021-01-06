@@ -13,9 +13,12 @@ class Category(models.Model):
 
 
 class Post(models.Model):
+    """система постов"""
     title = models.CharField(max_length=300)
     text = models.TextField()
-    author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    author = models.ForeignKey(User,
+                               on_delete=models.CASCADE,
+                               null=True)
     published = models.DateTimeField(auto_now=True)
     likes = GenericRelation(Like)
     dislikes = GenericRelation(Dislike)
@@ -37,8 +40,13 @@ class Post(models.Model):
     def total_dislikes(self):
         return self.dislikes.count()
 
+    @property
+    def total_comments(self):
+        return self.comments_post.count()
+
 
 class Comment(models.Model):
+    """Система комментариев"""
     post = models.ForeignKey(Post,
                              on_delete=models.CASCADE,
                              related_name='comments_post',
@@ -50,16 +58,49 @@ class Comment(models.Model):
                                null=True,
                                verbose_name='author',
                                blank=True)
-    text = models.TextField(default=None, verbose_name='add comment')
+    text = models.TextField(default=None,
+                            verbose_name='add comment')
     created = models.DateTimeField(auto_now=True)
     updated = models.DateTimeField(auto_now=True)
-    active = models.BooleanField(default=True, verbose_name='looking post')
+    active = models.BooleanField(default=True,
+                                 verbose_name='looking post')
 
     class Meta:
         ordering = ('created',)
 
     def __str__(self):
-        return f'Comment by {self.author} on {self.post}'
+        return f'Comment by {self.author} on post "{self.post}", id: {self.id}'
 
     def post_title(self):
         return self.post.title
+
+    @property
+    def total_replies(self):
+        return self.replies_comment.count()
+
+
+class Reply(models.Model):
+    """Система ответов на комментарии"""
+    comment = models.ForeignKey(Comment,
+                                on_delete=models.CASCADE,
+                                related_name='replies_comment',
+                                verbose_name='comment',
+                                blank=True,
+                                null=True)
+    author = models.ForeignKey(User,
+                               on_delete=models.CASCADE,
+                               null=True,
+                               verbose_name='author',
+                               blank=True)
+    text = models.TextField(default=None,
+                            verbose_name='add reply')
+    created = models.DateTimeField(auto_now=True)
+    updated = models.DateTimeField(auto_now=True)
+    active = models.BooleanField(default=True,
+                                 verbose_name='looking comment')
+
+    class Meta:
+        ordering = ('created',)
+
+    def __str__(self):
+        return f'Reply by {self.author} on post "{self.comment}", id: {self.id}'

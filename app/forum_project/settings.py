@@ -25,11 +25,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'djoser',
     'rest_framework',
+    'rest_framework_simplejwt',
     'django_filters',
 
+    'users',
     'forum',
     'likes',
+
 
 ]
 
@@ -45,9 +49,23 @@ MIDDLEWARE = [
 
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+}
+
+
+DJOSER = {
+    'ACTIVATION_URL': '#/activate/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL': False,
+}
+# поменять на True после загрузки на глобальный сервак
+
+
+SIMPLE_JWT = {
+    'AUTH_HEADER_TYPES': ('JWT',)
 }
 
 
@@ -85,6 +103,10 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
+
+
+AUTH_USER_MODEL = "users.User"
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {

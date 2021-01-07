@@ -5,6 +5,8 @@ from django.urls import reverse
 from django.contrib.contenttypes.fields import GenericRelation
 from likes.models import Like, Dislike
 
+from users.models import User
+
 class Category(models.Model):
     title = models.CharField(max_length=50)
 
@@ -46,6 +48,14 @@ class Post(models.Model):
     def total_comments(self):
         return self.comments_post.count()
 
+    @property
+    def author_name(self):
+        return self.author.username
+
+    @property
+    def category_name(self):
+        return self.category.title
+
 
 class Comment(models.Model):
     """Система комментариев"""
@@ -71,7 +81,7 @@ class Comment(models.Model):
         ordering = ('created',)
 
     def __str__(self):
-        return f'Comment by {self.author} on post "{self.post}", id: {self.id}'
+        return f'Comment by {self.author_name} on post "{self.post}", id: {self.id}'
 
     def post_title(self):
         return self.post.title
@@ -79,6 +89,10 @@ class Comment(models.Model):
     @property
     def total_replies(self):
         return self.replies_comment.count()
+
+    @property
+    def author_name(self):
+        return self.author.username
 
 
 class Reply(models.Model):
@@ -104,5 +118,9 @@ class Reply(models.Model):
     class Meta:
         ordering = ('created',)
 
+    @property
+    def author_name(self):
+        return self.author.username
+
     def __str__(self):
-        return f'Reply by {self.author} on post "{self.comment}", id: {self.id}'
+        return f'Reply by {self.author_name} on post "{self.comment}", id: {self.id}'
